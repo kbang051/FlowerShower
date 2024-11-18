@@ -1,0 +1,9 @@
+.parentContainer {
+    background-color: white;
+    height: 8%;
+}
+
+.categoryIconStyling {
+    flex: 1 !important
+}
+

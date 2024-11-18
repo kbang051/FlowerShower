@@ -1,0 +1,77 @@
+https://www.behance.net/gallery/210353897/Car-Ecommerce-Website-Design?tracking_source=search_projects|ecommerce+landing+page&l=0
+
+https://www.behance.net/gallery/180453795/ETO-Website-Design
+
+Website for landing page designs - Behance
+
+import { useState } from "react";
+
+import { useState } from "react";
+
+function App() {
+  return (
+    <>
+      <div className="container-fluid h-100 d-flex" style={{ backgroundColor: "white" }}>
+        
+        <div className="container m-2 rounded-5 d-flex flex-column" style={{ width: "55%", backgroundColor: "white" }}>
+          
+          <div className="container m-2 mt-4 d-flex justify-content-between align-items-center">
+            <div>
+              <span className={"fs-3"} style={{ color: "darkblue", fontWeight: "bold" }}>Topup</span>
+              <span className={"fs-3 text-primary"}>Online</span>
+            </div>
+            <div className="d-flex p-3" >
+              <div className="me-4" style={{ fontWeight: "bold" }}>Browse Products</div>
+              <div className="me-4" style={{ fontWeight: "bold" }}>Become a Seller</div>
+              <div style={{ fontWeight: "bold" }}>About Us</div>
+            </div>
+          </div>
+
+          <div className="container ml-2" style = {{marginTop: "10%"}}>
+            <div className="fs-3 text-wrap fw-semibold" style={{ color: "darkblue" }}> Lorem ipsum dolor sit amet consectetur adipisicing elit. Ullam optio eius soluta dolore iusto ipsum deserunt dolor voluptatum labore velit? Eaque est totam nulla, vel repellat aperiam molestiae praesentium porro.</div>
+          </div>
+
+          <div className="container mt-5">
+            <div className="fs-6 text-wrap text-secondary"> Lorem ipsum dolor sit amet consectetur adipisicing elit. Reiciendis obcaecati unde consequuntur, voluptates ea consectetur molestias, deleniti modi quas eos cumque. Quae eveniet sequi minima voluptatem iusto, quibusdam harum numquam.</div>
+          </div>
+
+          <div className="container mt-5 d-flex justify-content-center" style = {{paddingTop: "50px"}}>
+            <button type="button" className="btn btn-primary text-wrap rounded-2">Subscribe to our Newsletter</button>
+          </div>
+
+        </div>
+
+        <div className="container m-2 rounded-5 d-flex flex-column" style={{ width: "45%" }}>
+          <form className="m-2 mt-4 px-5">
+            {/* <div className="mb-4 d-flex justify-content-between align-items-center">
+              <div><span className={"fs-3"} style={{ backgroundColor: "lightblue", color: "darkblue", fontWeight: "bold" }}>Register</span></div>
+              <div><span className={"fs-3"} style={{ backgroundColor: "lightgreen", fontWeight: "bold" }}>Sign In</span></div>
+            </div> */}
+
+            <header class="d-flex justify-content-center py-3">
+              <ul class="nav nav-pills" style = {{width: "100%"}}>
+                <li className="nav-item w-50 text-center"><a href="#" class="nav-link active" aria-current="page">Register</a></li>
+                <li className="nav-item w-50 text-center"><a href="#" class="nav-link">Sign In</a></li>
+              </ul>
+            </header>
+
+            <div className="d-flex flex-column gap-3">
+              <div class="form-floating">
+                <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com" fdprocessedid="gbfsul"/>
+                <label for="floatingInput">Email or Username</label>
+              </div>
+              <div class="form-floating">
+                <input type="password" class="form-control" id="floatingPassword" placeholder="Password" fdprocessedid="j94xust"/>
+                <label for="floatingPassword">Password</label>
+              </div>
+            </div>
+            <p class="mt-5 mb-3 text-body-secondary" style = {{fontSize: "14px"}}>By Continuing, you agree to Terms of Use and Privacy Policy</p>
+            <button class="btn btn-primary w-100 py-2" type="submit" fdprocessedid="xpenu">Sign in</button>
+          </form>
+        </div>
+      </div>
+    </>
+  );
+}
+
+export default App;

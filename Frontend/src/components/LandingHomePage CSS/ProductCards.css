@@ -1,0 +1,39 @@
+.parentContainer {
+    justify-content: center; /* Center containers horizontally */
+    align-items: flex-start; /* Align rows at the top */
+}
+
+.imageContainer {
+    flex: 1 1 calc(25% - 1rem); /* Occupy 25% of width minus gap */
+    box-sizing: border-box; /* Include padding/border in size */
+    background-color: white;
+    justify-content: flex-start; /* Align content at the top */
+    padding: 1rem;
+    text-align: left; /* Ensure heading aligns to the left */
+    height: auto; /* Allow height to adjust */
+}
+
+.imageContainer h5 {
+    margin: 0 0 1rem; /* Add spacing below the heading */
+    padding-left: 0.5rem; /* Add consistent left padding */
+}
+
+.gridContainer {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); /* Two images per row */
+    gap: 0.5rem;
+    justify-content: flex-start; /* Align grid content to the left */
+    align-items: center; /* Vertically center the images in the grid */
+    width: 100%; /* Ensure it fits the container */
+    padding-left: 0.5rem; /* Same left padding as heading */
+}
+
+.imageCSS {
+    width: 100px; /* Fixed width */
+    height: 100px; /* Fixed height */
+    object-fit: cover; /* Maintain proportions */
+    border-radius: 8px;
+    margin: auto; /* Center within the grid cell */
+}
+
+
