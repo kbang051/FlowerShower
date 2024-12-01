@@ -28,6 +28,7 @@ const generateSignedUrl = async (parentCategory, gender, image) => {
 };
 
 const fetchProducts = asyncHandler(async (req, res) => {
+  console.log("Request received from the frontend:")
   const {
     page = 1,
     limit = 30,
@@ -84,6 +85,7 @@ const fetchProducts = asyncHandler(async (req, res) => {
 
     if (keyword) {
       filter.$or = [
+        { name: { $regex: keyword, $options: "i" } },
         { brand: { $regex: keyword, $options: "i" } },
         { color: { $regex: keyword, $options: "i" } },
         { productType: { $regex: keyword, $options: "i" } },
@@ -104,6 +106,11 @@ const fetchProducts = asyncHandler(async (req, res) => {
         ),
       }))
     );
+    console.log("Response sent to the frontend:")
+    console.log({totalProducts: totalProducts,
+      products: productsFetched,
+      totalPages: Math.ceil(totalProducts / limit),
+      currentPage: Number(page)})
 
     return res.status(200).json({
       totalProducts: totalProducts,
@@ -112,11 +119,7 @@ const fetchProducts = asyncHandler(async (req, res) => {
       currentPage: Number(page),
     });
   } catch (error) {
-    throw new ApiError(
-      500,
-      "Unable to fech product details from the backend",
-      error
-    );
+    throw new ApiError(500, "Unable to fech product details from the backend", error);
   }
 });
 
