@@ -83,18 +83,18 @@ const fetchProducts = asyncHandler(async (req, res) => {
       if (maxPrice) filter.price.$lte = Number(maxPrice);
     }
 
+    
     if (keyword) {
-      filter.$or = [
-        { name: { $regex: keyword, $options: "i" } },
-        { brand: { $regex: keyword, $options: "i" } },
-        { color: { $regex: keyword, $options: "i" } },
-        { productType: { $regex: keyword, $options: "i" } },
-        { gender: { $regex: keyword, $options: "i" } },
-      ];
+      filter.$text = { $search: keyword }
     }
+    
+    console.log("After text search")
+    console.log(filter)
 
     const totalProducts = await Product.countDocuments(filter);
-    const products = await Product.find(filter).skip(skip).limit(Number(limit));
+    
+    // const products = await Product.find(filter).skip(skip).limit(Number(limit));
+    const products = await Product.find(filter).sort({ score: { $meta: "textScore" } }).skip(skip).limit(Number(limit));
 
     const productsFetched = await Promise.all(
       products.map(async (product) => ({
@@ -106,6 +106,7 @@ const fetchProducts = asyncHandler(async (req, res) => {
         ),
       }))
     );
+
     console.log("Response sent to the frontend:")
     console.log({totalProducts: totalProducts,
       products: productsFetched,
@@ -119,6 +120,7 @@ const fetchProducts = asyncHandler(async (req, res) => {
       currentPage: Number(page),
     });
   } catch (error) {
+    console.log(error)
     throw new ApiError(500, "Unable to fech product details from the backend", error);
   }
 });
