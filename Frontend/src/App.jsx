@@ -11,8 +11,8 @@ function App() {
     <>
       {/* <RegisterLoginPage/> */}
 
-      {/* <MainLandingPage/> */}
-      <Products />
+      <MainLandingPage/>
+      {/* <Products /> */}
     </>
   );
 }

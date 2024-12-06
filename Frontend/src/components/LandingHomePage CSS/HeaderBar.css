@@ -7,3 +7,7 @@
     flex: 1 !important
 }
 
+.searchButton {
+    border-radius: 0 !important;
+}
+

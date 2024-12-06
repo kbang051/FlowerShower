@@ -32,6 +32,8 @@ const Products = () => {
         }
         return filteredParams
     }, [filter])
+
+   // return filter
    
     useEffect(() => {
         const fetchData = async() => {
