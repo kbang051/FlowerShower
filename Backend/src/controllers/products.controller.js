@@ -126,39 +126,184 @@ const fetchProducts = asyncHandler(async (req, res) => {
 });
 
 const fetchFilters = asyncHandler(async (req, res) => {
+  console.log("Request received from the frontend:")
+  const {
+    parentCategory,
+    subCategory,
+    color,
+    productType,
+    gender,
+    brand,
+    minPrice,
+    maxPrice,
+    keyword,
+  } = req.query;
+  
+  const filter = {}
   try {
-    const brands = await Product.distinct("brand");
-    const subcategories = await Product.distinct("subCategory");
-    const colors = await Product.distinct("color");
-    const gender = await Product.distinct("gender");
+    if (parentCategory) filter.parentCategory = parentCategory
+    if (subCategory) filter.subCategory = subCategory
+    if (color) filter.color = color 
+    if (productType) filter.productType = productType
+    if (gender) filter.gender = gender 
+    if (brand) filter.brand = brand 
+    if (minPrice || maxPrice) {
+      filter.price = {};
+      if (minPrice) filter.price.$gte = Number(minPrice);
+      if (maxPrice) filter.price.$lte = Number(maxPrice);
+    }
+    if (keyword) {
+      filter.$text = { $search: keyword }
+    }
 
-    const priceData = await Product.aggregate([
-      {
-        $group: {
-          _id: null,
-          maxPrice: { $max: "$price" },
-          minPrice: { $min: "$price" },
-        },
-      },
-    ])
+    const products = await Product.find(filter).sort({ score: { $meta: "textScore" } })
 
-    const maxPrice = priceData.length > 0 ? priceData[0].maxPrice : 0
-    const minPrice = priceData.length > 0 ? priceData[0].minPrice : 0
+    const filtered_parentCategory = new Set()
+    products.forEach((item) => filtered_parentCategory.add(item.parentCategory))
+    console.log(filtered_parentCategory)
 
-    return res.status(200).json({
-      brands,
-      subcategories,
-      colors,
-      gender,
-      maxPrice,
-      minPrice,
-    });
+    const filtered_subCategory = new Set()
+    products.forEach((item) => filtered_subCategory.add(item.subCategory))
+    console.log(filtered_subCategory)
+
+    const filtered_color = new Set()
+    products.forEach((item) => filtered_color.add(item.color))
+    console.log(filtered_color)
+
+    const filtered_productType = new Set()
+    products.forEach((item) => filtered_productType.add(item.productType))
+    console.log(filtered_productType)
+
+    const filtered_gender = new Set()
+    products.forEach((item) => filtered_gender.add(item.gender))
+    console.log(filtered_gender)
+
+    const prices = products.map((p) => p.price)
+    const filtered_maxPrice = prices.length > 0 ? Math.max(...prices) : 0
+    console.log(filtered_maxPrice)
+    const filtered_minPrice = prices.length > 0 ? Math.min(...prices) : 0
+    console.log(filtered_minPrice)
+
+  return res.status(200).json({
+    filtered_parentCategory,
+    filtered_subCategory,
+    filtered_color,
+    filtered_productType,
+    filtered_gender,
+    filtered_maxPrice,
+    filtered_minPrice
+  });
+
   } catch (error) {
     throw new ApiError(500, "Unable to fetch details of the filters: ", error);
   }
 });
 
 export { generateSignedUrl, fetchProducts, fetchFilters };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//code under try {} to fetch filters applicable to respective searches 
+
+// const brands = await Product.distinct("brand");
+// const subcategories = await Product.distinct("subCategory");
+// const colors = await Product.distinct("color");
+// const gender = await Product.distinct("gender");
+
+// const priceData = await Product.aggregate([
+//   {
+//     $group: {
+//       _id: null,
+//       maxPrice: { $max: "$price" },
+//       minPrice: { $min: "$price" },
+//     },
+//   },
+// ])
+
+// const maxPrice = priceData.length > 0 ? priceData[0].maxPrice : 0
+// const minPrice = priceData.length > 0 ? priceData[0].minPrice : 0
+
+// return res.status(200).json({
+//   brands,
+//   subcategories,
+//   colors,
+//   gender,
+//   maxPrice,
+//   minPrice,
+// });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 // const bucketUrl = "https://<your-bucket-name>.s3.<region>.amazonaws.com/"
 // https://fullstack-ecom.s3.us-east-1.amazonaws.com/data/

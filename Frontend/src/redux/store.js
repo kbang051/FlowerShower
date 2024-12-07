@@ -1,7 +1,5 @@
-import { combineReducers, configureStore } from '@reduxjs/toolkit'
+import { configureStore } from '@reduxjs/toolkit'
 import { searchBarInputReducer } from './reducers/searchBarInputReducer.js'
-
-// Combine reducers (useful for scalability)
 
 export const store = configureStore({
     reducer: {
