@@ -160,23 +160,23 @@ const fetchFilters = asyncHandler(async (req, res) => {
 
     const filtered_parentCategory = new Set()
     products.forEach((item) => filtered_parentCategory.add(item.parentCategory))
-    console.log(filtered_parentCategory)
+    console.log(Array.from(filtered_parentCategory))
 
     const filtered_subCategory = new Set()
     products.forEach((item) => filtered_subCategory.add(item.subCategory))
-    console.log(filtered_subCategory)
+    console.log(Array.from(filtered_subCategory))
 
     const filtered_color = new Set()
     products.forEach((item) => filtered_color.add(item.color))
-    console.log(filtered_color)
+    console.log(Array.from(filtered_color))
 
     const filtered_productType = new Set()
     products.forEach((item) => filtered_productType.add(item.productType))
-    console.log(filtered_productType)
+    console.log(Array.from(filtered_productType))
 
     const filtered_gender = new Set()
     products.forEach((item) => filtered_gender.add(item.gender))
-    console.log(filtered_gender)
+    console.log(Array.from(filtered_gender))
 
     const prices = products.map((p) => p.price)
     const filtered_maxPrice = prices.length > 0 ? Math.max(...prices) : 0
@@ -185,11 +185,11 @@ const fetchFilters = asyncHandler(async (req, res) => {
     console.log(filtered_minPrice)
 
   return res.status(200).json({
-    filtered_parentCategory,
-    filtered_subCategory,
-    filtered_color,
-    filtered_productType,
-    filtered_gender,
+    filtered_parentCategory: Array.from(filtered_parentCategory),
+    filtered_subCategory: Array.from(filtered_subCategory),
+    filtered_color: Array.from(filtered_color),
+    filtered_productType: Array.from(filtered_productType),
+    filtered_gender: Array.from(filtered_gender),
     filtered_maxPrice,
     filtered_minPrice
   });
