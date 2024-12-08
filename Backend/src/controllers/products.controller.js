@@ -126,7 +126,6 @@ const fetchProducts = asyncHandler(async (req, res) => {
 });
 
 const fetchFilters = asyncHandler(async (req, res) => {
-  console.log("Request received from the frontend:")
   const {
     parentCategory,
     subCategory,
@@ -136,63 +135,95 @@ const fetchFilters = asyncHandler(async (req, res) => {
     brand,
     minPrice,
     maxPrice,
-    keyword,
+    // keyword,
   } = req.query;
+
+  console.log("Filters sent by frontend:")
+  console.log(req.query)
   
   const filter = {}
   try {
-    if (parentCategory) filter.parentCategory = parentCategory
-    if (subCategory) filter.subCategory = subCategory
-    if (color) filter.color = color 
-    if (productType) filter.productType = productType
-    if (gender) filter.gender = gender 
-    if (brand) filter.brand = brand 
+    if (parentCategory) {
+      filter.parentCategory = Array.isArray(parentCategory) ? { $in: parentCategory } : parentCategory
+    }
+    if (subCategory) {
+      filter.subCategory = Array.isArray(subCategory) ? { $in: subCategory } : subCategory
+    }
+    if (color) {
+      filter.color = Array.isArray(color) ? { $in: color } : color
+    }
+    if (productType) {
+      filter.productType = Array.isArray(productType) ? { $in: productType } : productType
+    }
+    if (gender) {
+      filter.gender = Array.isArray(gender) ? { $in: gender } : gender
+    }
+    if (brand) {
+      filter.brand = Array.isArray(brand) ? { $in: brand } : brand
+    }
     if (minPrice || maxPrice) {
       filter.price = {};
-      if (minPrice) filter.price.$gte = Number(minPrice);
-      if (maxPrice) filter.price.$lte = Number(maxPrice);
-    }
-    if (keyword) {
-      filter.$text = { $search: keyword }
+      if (minPrice) filter.price.$gte = Number(minPrice)
+      if (maxPrice) filter.price.$lte = Number(maxPrice)
     }
 
-    const products = await Product.find(filter).sort({ score: { $meta: "textScore" } })
+    // if (parentCategory) filter.parentCategory = parentCategory
+    // if (subCategory) filter.subCategory = subCategory
+    // if (color) filter.color = color 
+    // if (productType) filter.productType = productType
+    // if (gender) filter.gender = gender 
+    // if (brand) filter.brand = brand 
+    // if (minPrice || maxPrice) {
+    //   filter.price = {};
+    //   if (minPrice) filter.price.$gte = Number(minPrice);
+    //   if (maxPrice) filter.price.$lte = Number(maxPrice);
+    // }
+    // if (keyword) {
+    //   filter.$text = { $search: keyword }
+    // }
+
+    const products = await Product.find(filter)
+    // const products = await Product.find(filter).sort({ score: { $meta: "textScore" } })
 
     const filtered_parentCategory = new Set()
     products.forEach((item) => filtered_parentCategory.add(item.parentCategory))
-    console.log(Array.from(filtered_parentCategory))
 
     const filtered_subCategory = new Set()
     products.forEach((item) => filtered_subCategory.add(item.subCategory))
-    console.log(Array.from(filtered_subCategory))
+
+    const filtered_brand = new Set()
+    products.forEach((item) => filtered_brand.add(item.brand))
 
     const filtered_color = new Set()
     products.forEach((item) => filtered_color.add(item.color))
-    console.log(Array.from(filtered_color))
 
     const filtered_productType = new Set()
     products.forEach((item) => filtered_productType.add(item.productType))
-    console.log(Array.from(filtered_productType))
 
     const filtered_gender = new Set()
     products.forEach((item) => filtered_gender.add(item.gender))
-    console.log(Array.from(filtered_gender))
 
     const prices = products.map((p) => p.price)
     const filtered_maxPrice = prices.length > 0 ? Math.max(...prices) : 0
-    console.log(filtered_maxPrice)
     const filtered_minPrice = prices.length > 0 ? Math.min(...prices) : 0
-    console.log(filtered_minPrice)
 
-  return res.status(200).json({
-    filtered_parentCategory: Array.from(filtered_parentCategory),
-    filtered_subCategory: Array.from(filtered_subCategory),
-    filtered_color: Array.from(filtered_color),
-    filtered_productType: Array.from(filtered_productType),
-    filtered_gender: Array.from(filtered_gender),
-    filtered_maxPrice,
-    filtered_minPrice
-  });
+    const fetchedFilterResponse = {
+      filtered_parentCategory: Array.from(filtered_parentCategory),
+      filtered_subCategory: Array.from(filtered_subCategory),
+      filtered_brand: Array.from(filtered_brand),
+      filtered_color: Array.from(filtered_color),
+      filtered_productType: Array.from(filtered_productType),
+      filtered_gender: Array.from(filtered_gender),
+      filtered_maxPrice,
+      filtered_minPrice
+    }
+
+    console.log()
+    console.log()
+    console.log("Backend response:")
+    console.log(fetchedFilterResponse)
+
+  return res.status(200).json(fetchedFilterResponse);
 
   } catch (error) {
     throw new ApiError(500, "Unable to fetch details of the filters: ", error);
@@ -200,7 +231,6 @@ const fetchFilters = asyncHandler(async (req, res) => {
 });
 
 export { generateSignedUrl, fetchProducts, fetchFilters };
-
 
 
 

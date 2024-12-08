@@ -1,27 +1,24 @@
-import React, {useState, useEffect, useMemo} from "react";
+import React, {useState, useEffect, useRef, useMemo} from "react";
 import axios from "axios";
-import '../ProductPages CSS/FilterSideBar.css'
+import _ from 'lodash'
+import '../ProductPages CSS/FilterSideBar.css' 
 
 const FilterSideBar = () => {
   const [filters, setFilters] = useState({})
   const [showMore, setShowMore] = useState({})
-  
-  const parentCategory = "Apparel" //to be dynamic
-  const gender = "Boys" //to be dynamic
-  const keyword = "gini jacket" //to be dynamic
+  const [filtersReceived, setFiltersReceived] = useState({
+    parentCategory: ["Apparel"],
+  });
+
+  // ref_Filters basically stores all the filters, including the filters that user selects from the filter sidebar
+  const ref_Filters = useRef(filtersReceived) 
 
   useEffect(() => {
     const fetch_filters = async () => {
       try {
         const api_result = await axios.get(
           "http://localhost:8000/api/v1/getProducts/getFilters",
-          {
-            params: {
-              parentCategory: parentCategory,
-              gender: gender,
-              keyword: keyword,
-            },
-          }
+          { params: filtersReceived }
         );
         if (api_result.data) {
           setFilters(api_result.data);
@@ -34,25 +31,32 @@ const FilterSideBar = () => {
     };
 
     fetch_filters();
-  }, [parentCategory, gender, keyword]);
-
-  console.log("filters")
-  console.log(filters)
+  }, [filtersReceived]);
 
   const filterObject = useMemo(() => {
     return {
-      "Parent Category": filters.filtered_parentCategory,
-      "Subcategory": filters.filtered_subCategory,
-      "Product": filters.filtered_productType,
-      "Color": filters.filtered_color,
-      "Gender": filters.filtered_gender,
-      "Maximum Price": filters.filtered_maxPrice,
-      "Minimum Price": filters.filtered_minPrice,
+      "parentCategory": filters.filtered_parentCategory,
+      "subCategory": filters.filtered_subCategory,
+      "color": filters.filtered_color,
+      "productType": filters.filtered_productType,
+      "gender": filters.filtered_gender,
+      "brand": filters.filtered_brand,
+      "maxPrice": filters.filtered_maxPrice,
+      "minPrice": filters.filtered_minPrice,
     };
   }, [filters]);
 
-  console.log("filterObject:")
-  console.log(filterObject)
+  const handleCheckBox = (key, item) => {
+    const updatedFilters = { ...ref_Filters.current }
+
+    if (updatedFilters[key]?.includes(item)) {
+      updatedFilters[key] = updatedFilters[key].filter((val) => val !== item)
+    } else {
+      updatedFilters[key] = updatedFilters[key] ? [...updatedFilters[key], item]: [item];
+    }
+    ref_Filters.current = updatedFilters
+    setFiltersReceived({ ...updatedFilters })
+  };
 
   return (
     <div className="d-flex">
@@ -87,7 +91,11 @@ const FilterSideBar = () => {
                               type="checkbox"
                               id={`checkbox-${key}-${idx}`}
                               value={item}
-                              style={{ marginLeft: "15px" }}
+                              checked={
+                                ref_Filters.current[key]?.includes(item) ||
+                                false
+                              }
+                              onChange={() => handleCheckBox(key, item)}
                             />
                             <label
                               className="form-check-label ms-2"
@@ -120,7 +128,10 @@ const FilterSideBar = () => {
                         type="checkbox"
                         id={`checkbox-${key}`}
                         value={value || "N/A"}
-                        style={{ marginLeft: "15px" }}
+                        checked={
+                          ref_Filters.current[key]?.includes(value) || false
+                        }
+                        onChange={() => handleCheckBox(key, value)}
                       />
                       <label
                         className="form-check-label ms-2"
