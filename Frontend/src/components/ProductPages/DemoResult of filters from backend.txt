@@ -1,0 +1,22 @@
+
+filtered_color
+: 
+(14) ['Grey', 'Black', 'Blue', 'Red', 'White', 'Maroon', 'Brown', 'Beige', 'Pink', 'Navy Blue', 'Khaki', 'Green', 'Yellow', 'Orange']
+filtered_gender
+: 
+['Boys']
+filtered_maxPrice
+: 
+100
+filtered_minPrice
+: 
+50
+filtered_parentCategory
+: 
+['Apparel']
+filtered_productType
+: 
+(8) ['Jackets', 'Shorts', 'Shirts', 'Trousers', 'Jeans', 'Capris', 'Tshirts', 'Blazers']
+filtered_subCategory
+: 
+(2) ['Topwear', 'Bottomwear']
