@@ -22,11 +22,13 @@ const generateAccessAndRefreshTokens = async (userID) => {
 };
 
 const registerUser = asyncHandler(async (req, res) => {
-  const { firstname, lastname, username, email, password, role, address } =
-    req.body;
-  console.log("First Name: ", firstname);
-  const required_elements = [firstname, lastname, username, email, password]; //ensure all elements are present
-  console.log("Required Elements: ", required_elements);
+  console.log("Request received at register")
+  const { firstname, lastname, username, email, password, role, address } = req.body;
+  console.log("Data received at register: ")
+  console.log(req.body)
+  console.log(firstname)
+  console.log(lastname)
+  const required_elements = [firstname, lastname, username, email, password]; 
   for (let i = 0; i < required_elements.length; i++) {
     if (!required_elements[i]?.trim()) {
       throw new ApiError(
@@ -39,42 +41,16 @@ const registerUser = asyncHandler(async (req, res) => {
   const existingUser = await User.findOne({
     $or: [{ username }, { email }],
   });
-  if (existingUser) {
-    throw new ApiError(400, "The user already exists, please login");
-  }
-  
-  // const passwordRegex =
-  //   /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*\W)(?!.* ).{8,16}$/;
-  // if (!passwordRegex.test(password)) {
-  //   throw new ApiError(
-  //     400,
-  //     "Password is invalid. It must contain at least one digit, one lowercase letter, one uppercase letter, one special character, no spaces, and be 8-16 characters long."
-  //   );
-  // }
+  console.log("Bypassed existingUser")
 
-  // const user = await User.create({
-  //   firstname: firstname,
-  //   lastname: lastname,
-  //   username: username,
-  //   email: email,
-  //   password: password,
-  //   role: role,
-  //   address: address,
-  // });
 
-  // const createdUser = await User.findById(user._id).select("-refreshToken");
-  // if (!createdUser) {
-  //   throw new ApiError(500, "Something went wrong while creating the user");
-  // }
-
-  return res
-    .status(200)
-    .json(new ApiResponse(200, {}, "Proceed to OTP verification"));
+  if (existingUser) throw new ApiError(400, "An account with this email already exists. Please login or use a different email.");
+  console.log("Left from register")
+  return res.status(200).json(new ApiResponse(200, {}, "Proceed to OTP verification"));
 });
 
 const registerAfterVerification = asyncHandler(async (req, res) => {
-  const { firstname, lastname, username, email, password, role, address } =
-    req.body;
+  const { firstname, lastname, username, email, password, role, address } = req.body;
   const user = await User.create({
     firstname: firstname,
     lastname: lastname,

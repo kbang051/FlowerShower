@@ -1,19 +1,12 @@
 import React, {useState} from "react";
-import { useDispatch } from "react-redux";
-import { setSearchBarInput } from "../../redux/actions/searchBarInputAction.js";
 import "../LandingHomePage CSS/HeaderBar.css";
 
 const HeaderBar = () => {
   const [searchBarInput, setInput] = useState("")
-  const dispatch = useDispatch() // Redux dispatch
-
-const handleSearch = () => {
-  dispatch(setSearchBarInput(searchBarInput))
-}
 
   return (
-    <div className="container-xxl d-flex justify-content-center align-items-center gap-4 px-4 parentContainer">
-      <div className="d-flex justify-content-center align-items-center fs-4 fw-bold text-primary categoryIconStyling">
+    <div className="container-fluid d-flex justify-content-center align-items-center gap-4 px-4 position-sticky top-0 parentContainer">
+      <div className="d-flex justify-content-center align-items-center fs-4 fw-bold text-primary categoryIconStyling p-2">
         FlowerShower
       </div>
       <div className="flex-grow-1 d-flex justify-content-center align-items-center searchButton">
@@ -24,7 +17,7 @@ const handleSearch = () => {
           aria-label="Search"
           onChange={(event) => {setInput(event.target.value)}}
         />
-        <button className="btn btn-primary searchButton" onClick={handleSearch}> Search </button>
+        <button className="btn btn-primary searchButton"> Search </button>
       </div>
       <div className="d-flex justify-content-end align-items-center categoryIconStyling">
         <ul className="nav nav-pills">

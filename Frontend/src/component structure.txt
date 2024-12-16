@@ -1,0 +1,1 @@
+# Product.jsx and FilterSideBar.jsx must be together as they will be interacting with each other all time.

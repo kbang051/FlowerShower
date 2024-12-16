@@ -10,7 +10,12 @@ function generateOTP() {
 }
 
 const sendOTP = asyncHandler(async (req, res, next) => {
+    console.log("")
+    console.log("")
+    console.log("")
+    console.log("Request received at sendOTP")
     const { email } = req.body 
+    console.log("Email received at sendOTP: ", email)
     const otp = generateOTP() 
     await OTP.findOneAndUpdate( {email}, { $set: { otp, createdAt: new Date() }  }, { upsert: true })
 
@@ -32,6 +37,7 @@ const sendOTP = asyncHandler(async (req, res, next) => {
             subject: "OTP",
             html: `<b>Your OTP is: ${otp}</b>`
         })
+        console.log("Left from sentOTP")
         res.status(200).json({ message: "OTP sent successfully" })
     } catch (error) {
         console.log(error)
@@ -39,9 +45,10 @@ const sendOTP = asyncHandler(async (req, res, next) => {
     }
 })
 
-const verifyOTP = asyncHandler(async (req, res, next) => {
-    console.log(req.body)              
+const verifyOTP = asyncHandler(async (req, res, next) => {            
     const { email, otp } = req.body
+    console.log("Data received at verifyOTP:")
+    console.log(req.body)
     const otpRecord = await OTP.findOne({ email })
     if (!otpRecord || otpRecord.otp != otp) {
         return next(new ApiError(400, "Invalid or expired OTP"))
