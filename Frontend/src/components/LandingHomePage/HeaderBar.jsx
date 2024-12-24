@@ -5,8 +5,8 @@ const HeaderBar = () => {
   const [searchBarInput, setInput] = useState("")
 
   return (
-    <div className="container-fluid d-flex justify-content-center align-items-center gap-4 px-4 position-sticky top-0 parentContainer">
-      <div className="d-flex justify-content-center align-items-center fs-4 fw-bold text-primary categoryIconStyling p-2">
+    <div className="container-fluid d-flex justify-content-center align-items-center gap-4 px-4 parentContainer">
+      <div className="d-flex justify-content-center align-items-center fs-4 fw-bold text-primary categoryIconStyling">
         FlowerShower
       </div>
       <div className="flex-grow-1 d-flex justify-content-center align-items-center searchButton">
@@ -76,3 +76,6 @@ const HeaderBar = () => {
 };
 
 export default HeaderBar;
+
+
+//#23272f

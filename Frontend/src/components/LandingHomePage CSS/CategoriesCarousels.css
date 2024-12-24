@@ -9,11 +9,20 @@ swiper-container {
     text-align: center;
 }
 
-
-
 swiper-slide img {
     height: 100%;
     width: 100%;
     object-fit: cover;
     border-radius: 8px;
+    cursor: pointer;
+}
+
+.heading {
+    color: #DEE2E6;
+}
+
+.heading:hover {
+    color: rgb(56, 143, 198);
+    cursor: pointer;
+    text-decoration: underline rgb(56, 143, 198);
 }

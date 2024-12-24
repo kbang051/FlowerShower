@@ -29,6 +29,7 @@ const generateSignedUrl = async (parentCategory, gender, image) => {
 
 const fetchProducts = asyncHandler(async (req, res) => {
   console.log("Fetch product request received")
+  console.log(req)
   const {
     page = 1,
     limit = 30,
@@ -193,7 +194,7 @@ const fetchFilters = asyncHandler(async (req, res) => {
     // console.log("Backend response:")
     // console.log(fetchedFilterResponse)
 
-  return res.status(200).json(fetchedFilterResponse);
+    return res.status(200).json(fetchedFilterResponse);
 
   } catch (error) {
     throw new ApiError(500, "Unable to fetch details of the filters: ", error);

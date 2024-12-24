@@ -52,9 +52,11 @@ const RightPartOfLandingPage = () => {
         }
         setLoginFormData(userInput)
         try {
-            await axios.post('http://localhost:8000/api/v1/users/login', userInput)
-            setToast({ show: true, message: "Login Successful !!", type: "success" })
-            navigate('/mainLandingPage')
+            const response = await axios.post('http://localhost:8000/api/v1/users/login', loginFormData, { withCredentials: true })
+            if (response.status == 200) {
+                setToast({ show: true, message: "Login Successful !!", type: "success" })
+                navigate('/mainLandingPage')
+            }
         } catch (error) {
             setToast({ show: true, message: error.message || "An error occurred", type: "error" })
         }
@@ -91,17 +93,20 @@ const RightPartOfLandingPage = () => {
             password: password.current.value
         }
         try {
-            await axios.post('http://localhost:8000/api/v1/users/registerAfterVerification', { ...registerFormData, otp: otp.current.value })
-            setToast({ show: true, message: "OTP verified successfully!", type: "success" })
-            // setShowOTP(false)
+            const response = await axios.post('http://localhost:8000/api/v1/users/registerAfterVerification', { ...registerFormData, otp: otp.current.value })
+            if (response.status == 200) {
+                setToast({ show: true, message: "OTP verified successfully!", type: "success" })
+                setShowOTP(false)
+                setRegister("SignIn")
+            }
         } catch (error) {
             setToast({ show: true, message: error.message || "An error occurred", type: "error" })
         }
     }
 
-    const resendOtp = async () => {
+    const resendOtp = async (event) => {
         try {
-          await axios.post('http://localhost:8000/api/v1/users/sendOtp', { email: email.current.value })
+          await axios.post('http://localhost:8000/api/v1/users/sendOtp', { email: registerFormData.email })
           setToast({ show: true, message: "OTP resent successfully!", type: "success" })
           setOtpSent(true) // OTP resent
         } catch (error) {
@@ -111,7 +116,7 @@ const RightPartOfLandingPage = () => {
 
     const OtpUI = () => {
         const [resendOTP, setResendOTP] = useState(false)
-        const [countDown, setCountDown] = useState(50)
+        const [countDown, setCountDown] = useState(30)
         useEffect(()=> {
             if (countDown > 0) {
                 const timer = setTimeout(() => setCountDown(countDown-1), 1000)
@@ -120,6 +125,23 @@ const RightPartOfLandingPage = () => {
                 setResendOTP(true)
             }
         }, [countDown])
+
+        const OtpInterface = () => {
+            if (countDown != 0) {
+                return (
+                    <div className='d-flex justify-content-center gap-2'>
+                        <span className='text-dark'>Resend OTP in</span>
+                        <span className="text-center mb-3 text-primary"> {countDown} </span>
+                    </div>
+                )
+            } else {
+                return (
+                    <div className='d-flex justify-content-center gap-2'>
+                        <button className= "btn btn-primary text-center mb-3" onClick={() => resendOtp()}> Resend OTP </button>
+                    </div>
+                )
+            }
+        }
 
         return (
             <div
@@ -135,14 +157,10 @@ const RightPartOfLandingPage = () => {
             }}
             >
             <div className="bg-light p-4 rounded" style={{ width: "300px", boxShadow: "0 4px 8px rgba(0, 0, 0, 0.2)"}}>
-                <h5 className="text-center mb-3">OTP Verification</h5>
-                <p className="text-start">Please Enter OTP</p>
-                <input type="text" className="form-control mb-3" placeholder="Enter OTP" ref= {otp}/>
-                {countDown === 0 && (
-                    <p className="text-center mb-3 link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover" onClick={resendOtp}>
-                        Resend OTP
-                    </p>
-                )}             
+                <h5 className="text-center mb-3 text-dark">OTP Verification</h5>
+                <p className="text-start text-dark">Please Enter OTP</p>
+                <input type="text" className="form-control mb-3" placeholder="OTP" ref= {otp}/>
+                {OtpInterface()}
                 <div className='d-flex gap-2'>
                     <button className="btn btn-primary w-100" type= "submit" onClick={otpVerification}>Submit</button>
                     <button className="btn btn-primary w-100" type= "submit" onClick={() => setShowOTP(false)}>Cancel</button>
@@ -155,7 +173,7 @@ const RightPartOfLandingPage = () => {
     const RegisterUI = () => {
         return (
             <>
-                <div className='d-flex flex-column gap-3 p-5'>
+                <div className='d-flex flex-column gap-3 p-5' style= {{backgroundColor: "#23272F"}}>
                     <div class="input-group mb-3">
                         <span class="input-group-text" id="inputGroup-sizing-default">First Name</span>
                         <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" ref = {firstname} />
@@ -185,7 +203,7 @@ const RightPartOfLandingPage = () => {
     const SignInUI = () => {
         return (
             <>
-                <div className='d-flex flex-column gap-3 p-5'>
+                <div className='d-flex flex-column gap-3 p-5' style= {{backgroundColor: "#23272F"}}>
                     <div class="input-group mb-3">
                         <span class="input-group-text" id="inputGroup-sizing-default">Email or Username</span>
                         <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" ref = {emailOrUsername}/>
@@ -202,10 +220,10 @@ const RightPartOfLandingPage = () => {
 
     
     return (
-        <div className='container m-2 d-flex flex-column' style={{border: "2px solid red", width: "500px"}}>
-                <div className='d-flex justify-content-center m-3' style={{backgroundColor: "lightpink"}}> 
-                    <button className='btn fw-semibold fs-5 w-50' type="submit" style = {{border: "1px solid black"}} onClick={() => setRegister("register")}> Register </button>
-                    <button className='btn fw-semibold fs-5 w-50' type="submit" style = {{border: "1px solid black"}} onClick={() => setRegister("signIn")}> Login    </button>
+        <div className='container m-2 d-flex flex-column text-light' style={{border: "1px solid black", width: "450px", backgroundColor: "#23272F"}}>
+                <div className='d-flex justify-content-center m-3 gap-2'> 
+                    <button className='btn fw-semibold fs-5 w-50 btn-light' type="submit" style = {{border: "1px solid black"}} onClick={() => setRegister("register")}> Register </button>
+                    <button className='btn fw-semibold fs-5 w-50 btn-light' type="submit" style = {{border: "1px solid black"}} onClick={() => setRegister("signIn")}> Login    </button>
                 </div>
                 {register === "register" ? <RegisterUI /> : <SignInUI/>}
                 {showOTP && <OtpUI />}

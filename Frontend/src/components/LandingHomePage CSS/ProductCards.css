@@ -6,7 +6,7 @@
 .imageContainer {
     flex: 1 1 calc(25% - 1rem); /* Occupy 25% of width minus gap */
     box-sizing: border-box; /* Include padding/border in size */
-    background-color: white;
+    /* background-color: white; */
     justify-content: flex-start; /* Align content at the top */
     padding: 1rem;
     text-align: left; /* Ensure heading aligns to the left */
@@ -25,7 +25,7 @@
     justify-content: flex-start; /* Align grid content to the left */
     align-items: center; /* Vertically center the images in the grid */
     width: 100%; /* Ensure it fits the container */
-    padding-left: 0.5rem; /* Same left padding as heading */
+    padding-left: 0.5rem; 
 }
 
 .imageCSS {
@@ -34,6 +34,28 @@
     object-fit: cover; /* Maintain proportions */
     border-radius: 8px;
     margin: auto; /* Center within the grid cell */
+    cursor: pointer;
 }
+
+.objectShadow {
+    transition: box-shadow 0.3s ease;
+}
+
+.objectShadow:hover {
+    box-shadow: 0 5px 10px white; /* Shadow on hover */
+    cursor: pointer;
+}
+
+.heading {
+    color: #DEE2E6;
+}
+
+.heading:hover {
+    color: rgb(56, 143, 198);
+    cursor: pointer;
+    text-decoration: underline rgb(56, 143, 198);
+}
+
+
 
 

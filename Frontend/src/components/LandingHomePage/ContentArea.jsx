@@ -6,7 +6,7 @@ import Products from "../Products/Products.jsx";
 
 const ContentArea = () => {
   return (
-    <div className="d-flex flex-column h-screen w-100 bg-light">      
+    <div className="d-flex flex-column h-screen w-100" style={{backgroundImage: "conic-gradient(from 90deg at -10% 100%, #2b303b 0deg, #2b303b 90deg, #16181d 1turn)"}}>      
       <CategoriesHeader/>
       <ProductCards/>
       <CategoriesCarousels/>

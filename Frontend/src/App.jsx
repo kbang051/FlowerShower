@@ -17,6 +17,10 @@ function App() {
     {
       path: "/mainLandingPage",
       element: <> <MainLandingPage/> </>
+    },
+    {
+      path: "/filterSideBar",
+      element: <> <FilterSideBar/> </>
     }
   ])
   return (

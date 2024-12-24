@@ -1,4 +1,6 @@
 import React, {useState, useEffect, useRef, useCallback, useMemo} from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { addFilter, clearFilters } from "../../filterSlice.js";
 import axios from "axios";
 import _ from 'lodash'
 import HeaderBar from "../LandingHomePage/HeaderBar.jsx";
@@ -9,6 +11,18 @@ const FilterSideBar = () => {
   const [showMore, setShowMore] = useState({})
   const [products, setProducts] = useState({}) //products
   const [productDetails, setProductDetails] = useState([])
+
+  // const filtersReceivedFromPreviousPage = useSelector((state) => state.filterSlicer.filter)
+  // console.log("filtersReceivedFromPreviousPage", filtersReceivedFromPreviousPage)
+  // const [filtersReceived, setFiltersReceived] = useState(filtersReceivedFromPreviousPage);
+
+  // query: {
+  //   parentCategory: [ 'Apparel' ],
+  //   subCategory: [ 'Topwear' ],
+  //   color: [ 'Grey' ],
+  //   productType: [ 'Jackets' ]
+  // },
+
   const [filtersReceived, setFiltersReceived] = useState({
     parentCategory: ["Apparel"],
   });

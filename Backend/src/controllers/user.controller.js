@@ -78,43 +78,23 @@ const registerAfterVerification = asyncHandler(async (req, res) => {
 });
 
 const loginUser = asyncHandler(async (req, res) => {
+  console.log(req.body)
   const { username, password } = req.body;
-
-  if (!username) {
-    throw new ApiError(400, "Please enter username or email to login");
-  }
-  if (!password) {
-    throw new ApiError(400, "Please enter password");
-  }
-
+  if (!username) throw new ApiError(400, "Please enter username or email to login");
+  if (!password) throw new ApiError(400, "Please enter password");
   try {
-    const user = await User.findOne({
-      $or: [{ username: username }, { email: username }],
-    });
-
-    if (!user) {
-      throw new ApiError(
-        400,
-        "User hasn't been registered, please register and then login"
-      );
-    }
-
+    const user = await User.findOne({ $or: [{ username: username }, { email: username }] });
+    if (!user) throw new ApiError(400, "User hasn't been registered, please register and then login");
     const isPasswordValid = await user.isPasswordCorrect(password);
-    if (!isPasswordValid) {
-      throw new ApiError(400, "Incorrect password");
-    }
-
+    if (!isPasswordValid) throw new ApiError(400, "Incorrect password");
     const { accessToken, refreshToken } = await generateAccessAndRefreshTokens(user._id);
-
     const loggedInUser = await User.findById(user._id).select("-password -refreshToken");
-
     const cookieOptions = {
       httpOnly: true,
       secure: true,
       sameSite: "Strict",
     };
     res.cookie("accessToken", accessToken, cookieOptions);
-
     return res
       .status(200)
       .json(

@@ -4,9 +4,9 @@ import "../LandingHomePage CSS/CategoriesCarousels.css";
 const CategoriesCarousels = () => {
   return (
     <>
-      <div className="container-xxl d-flex flex-column gap-1 mt-1 p-3 parentcontainer">
-        <div className="d-flex flex-column p-3 gap-2 h-100 w-100 bg-light">
-          <h5 style = {{marginBottom: "0"}}> Explore Mens Fashion</h5>
+      <div className="container-xxl d-flex flex-column gap-1 mt-1 p-3 parentcontainer gap-3">
+        <div className="d-flex flex-column p-3 gap-2 h-100 w-100" style={{color: "#DEE2E6", backgroundColor: "#23272F"}}>
+          <h5 style = {{height: "5%"}} className="heading"> Explore Mens Fashion</h5>
           <swiper-container
             space-between="10"
             slides-per-view="5"
@@ -49,8 +49,8 @@ const CategoriesCarousels = () => {
             </swiper-slide>
           </swiper-container>{" "}
         </div>
-        <div className="d-flex flex-column gap-2 p-3 h-100 w-100 bg-light">
-          <h5 style = {{height: "5%"}}> Explore Womens Fashion</h5>
+        <div className="d-flex flex-column gap-2 p-3 h-100 w-100" style={{color: "#DEE2E6", backgroundColor: "#23272F"}}>
+          <h5 style = {{height: "5%"}} className="heading"> Explore Womens Fashion</h5>
           <swiper-container
             space-between="10"
             slides-per-view="5"
@@ -93,8 +93,8 @@ const CategoriesCarousels = () => {
             </swiper-slide>
           </swiper-container>{" "}
         </div>
-        <div className="d-flex flex-column gap-2 p-3 h-100 w-100 bg-light" >
-          <h5 style = {{height: "5%"}}> Explore Girls Fashion</h5>
+        <div className="d-flex flex-column gap-2 p-3 h-100 w-100" style={{color: "#DEE2E6", backgroundColor: "#23272F"}} >
+          <h5 style = {{height: "5%"}} className="heading"> Explore Girls Fashion</h5>
           <swiper-container
             space-between="10"
             slides-per-view="5"
@@ -137,8 +137,8 @@ const CategoriesCarousels = () => {
             </swiper-slide>
           </swiper-container>{" "}
         </div>
-        <div className="d-flex flex-column gap-2 p-3 h-100 w-100 bg-light" >
-          <h5 style = {{height: "5%"}}> Explore Boys Fashion</h5>
+        <div className="d-flex flex-column gap-2 p-3 h-100 w-100" style={{color: "#DEE2E6", backgroundColor: "#23272F"}} >
+          <h5 style = {{height: "5%"}} className="heading"> Explore Boys Fashion</h5>
           <swiper-container
             space-between="10"
             slides-per-view="5"

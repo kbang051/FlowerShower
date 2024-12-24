@@ -2,4 +2,13 @@
     height: 50px;
     width: 80px;
 }
- 
+
+.objectShadow {
+    border-radius: 10px;
+    transition: box-shadow 0.3s ease;
+}
+
+.objectShadow:hover {
+    box-shadow: 0 4px 10px white; /* Shadow on hover */
+    cursor: pointer;
+}

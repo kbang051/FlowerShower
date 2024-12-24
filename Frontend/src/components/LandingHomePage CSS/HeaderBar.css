@@ -1,9 +1,6 @@
 .parentContainer {
-    background-color: #094d44;
-    height: 70px; /* Set a fixed height for the header */
-    position: sticky;
-    top: 0;
-    z-index: 1000; /* Ensure the header stays on top of other content */
+    background-color: #23272f;
+    height: 8%; 
   }
   
   .categoryIconStyling {
@@ -13,4 +10,7 @@
   .searchButton {
     border-radius: 0 !important;
   }
+
+  /* #dee2e6 */
+  /* #1B1F22 */
 
