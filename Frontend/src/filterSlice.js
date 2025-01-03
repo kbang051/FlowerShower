@@ -3,7 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 const filterSlice = createSlice({
     name: 'filterSlicer',
     initialState: {
-        filter: {}
+        filter: { parentCategory: ["Apparel"] }
     },
     reducers: {
         addFilter: (state, action) => {
@@ -16,7 +16,6 @@ const filterSlice = createSlice({
                 console.error(`Key "${key}" exists but is not an array.`)
             }
         },
-
         clearFilters: (state) => {
             state.filter = {}
         }

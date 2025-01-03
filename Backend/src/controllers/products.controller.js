@@ -97,6 +97,7 @@ const fetchProducts = asyncHandler(async (req, res) => {
 });
 
 const fetchFilters = asyncHandler(async (req, res) => {
+  console.log("Fetch filters request received")
   const {
     parentCategory,
     subCategory,
@@ -179,14 +180,14 @@ const fetchFilters = asyncHandler(async (req, res) => {
     const filtered_minPrice = prices.length > 0 ? Math.min(...prices) : 0
 
     const fetchedFilterResponse = {
-      filtered_parentCategory: Array.from(filtered_parentCategory),
-      filtered_subCategory: Array.from(filtered_subCategory),
-      filtered_brand: Array.from(filtered_brand),
-      filtered_color: Array.from(filtered_color),
-      filtered_productType: Array.from(filtered_productType),
-      filtered_gender: Array.from(filtered_gender),
-      filtered_maxPrice,
-      filtered_minPrice
+      ParentCategory: Array.from(filtered_parentCategory),
+      SubCategory: Array.from(filtered_subCategory),
+      Brand: Array.from(filtered_brand),
+      Color: Array.from(filtered_color),
+      ProductType: Array.from(filtered_productType),
+      Gender: Array.from(filtered_gender),
+      MaxPrice: Array.from(filtered_maxPrice),
+      MinPrice: Array.from(filtered_minPrice)
     }
 
     // console.log()

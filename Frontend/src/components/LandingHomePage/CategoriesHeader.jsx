@@ -22,7 +22,7 @@ const CategoriesHeader = () => {
       dispatch(clearFilters())
     }
 
-    setTimeout(()=> { navigate(`/filterSideBar`) }, 0)
+    setTimeout(()=> { navigate(`/mainProductPage`) }, 0)
   };
   
   const reduxFilter = useSelector((state) => state.filterSlicer.filter) 
