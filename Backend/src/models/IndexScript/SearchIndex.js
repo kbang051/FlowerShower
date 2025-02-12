@@ -6,9 +6,7 @@ const createProductIndex = async () => {
     console.log("Reached SearchIndex File");
 
     const existingIndexes = await Product.collection.indexes();
-    const textIndex = existingIndexes.find(index =>
-      index.name === "ProductTextIndex"
-    );
+    const textIndex = existingIndexes.find(index => index.name === "ProductTextIndex");
 
     if (!textIndex) {
       await Product.collection.createIndex(

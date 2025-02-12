@@ -7,7 +7,6 @@ const additionOfProducts = async (req, res) => {
         const sheetName = workbook.SheetNames[0]
         const worksheet = workbook.Sheets[sheetName]
         const jsonData =  xlsx.utils.sheet_to_json(worksheet) 
-        console.log(jsonData[0])
 
         const recordMap = jsonData.map(record => ({
             name:   record.ProductTitle,
@@ -24,10 +23,8 @@ const additionOfProducts = async (req, res) => {
         }))
 
         const insertData = await Product.insertMany(recordMap)
-        console.log("Data Inserted Successfully")
         res.status(201).json({ message: "Data Inserted Successfully" });
     } catch (error) {
-        console.log(error)
         res.status(500).json({ message: "Data insertion failed", error });
     }
 }

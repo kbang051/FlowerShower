@@ -14,13 +14,12 @@ const CategoriesHeader = () => {
   const navigate = useNavigate()
 
   const selectionCategory = (label) => {
-    if (label === "Men" || label === "Boys") {
+    if (label === "Men" || label === "Boys") 
       dispatch(addFilter({ key: "gender", value: ["Men","Boys"] }));
-    } else if (label === "Women" || label === "Girls"){
+    else if (label === "Women" || label === "Girls")
       dispatch(addFilter({ key: "gender", value: ["Women","Girls"] }));
-    } else {
+    else 
       dispatch(clearFilters())
-    }
 
     setTimeout(()=> { navigate(`/mainProductPage`) }, 0)
   };

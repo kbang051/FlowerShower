@@ -54,6 +54,7 @@ const RightPartOfLandingPage = () => {
         try {
             const response = await axios.post('http://localhost:8000/api/v1/users/login', loginFormData, { withCredentials: true })
             if (response.status == 200) {
+                localStorage.setItem('UserName', loginFormData.username)
                 setToast({ show: true, message: "Login Successful !!", type: "success" })
                 navigate('/mainLandingPage')
             }

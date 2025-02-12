@@ -29,7 +29,6 @@ const generateSignedUrl = async (parentCategory, gender, image) => {
 
 const fetchProducts = asyncHandler(async (req, res) => {
   console.log("Fetch product request received")
-  console.log(req)
   const {
     page = 1,
     limit = 30,
@@ -82,8 +81,9 @@ const fetchProducts = asyncHandler(async (req, res) => {
           product.parentCategory,
           product.gender,
           product.image
-        )}))
-      )
+        ),
+      }))
+    );
 
     return res.status(200).json({
       TotalProducts: totalProducts,

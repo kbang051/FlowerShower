@@ -30,4 +30,9 @@ import productRouter from "./routes/products.routes.js"
 app.use("/api/v1/getProducts", productRouter) // http://localhost:8000/api/v1/getProducts/getProducts
                                               // http://localhost:8000/api/v1/getProducts/getFilters
 
+import cartRouter from "./routes/cart.routes.js"
+
+app.use("/api/v1/cart", cartRouter) // http://localhost:8000/api/v1/cart/addToCart
+                                    // http://localhost:8000/api/v1/cart/viewCart
+                                              
 export { app };
