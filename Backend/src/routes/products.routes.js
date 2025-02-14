@@ -1,5 +1,5 @@
 import { Router } from "express"
-import { generateSignedUrl, fetchProducts, fetchFilters } from "../controllers/products.controller.js"
+import { fetchProducts, fetchFilters } from "../controllers/products.controller.js"
 
 const router = Router()
 

@@ -1,42 +1,52 @@
 import axios from "axios";
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
+import { handleAddToCart, handleUpdateQuantity } from "../Cart/cartOperations.js";
 import { addToCart, decreaseQuantity, increaseQuantity, removeFromCart } from "../../cartSlice.js";
 
 const ProductPage = ({ products }) => {
   const dispatch = useDispatch()
   const cart = useSelector((state) => state.cart)
-  console.log("Cart Items")
+  console.log("Initialized Items")
   console.log(cart)
-  const handleAddToCart = async (productId) => {
-    try {
-      const response = await axios.post("http://localhost:8000/api/v1/cart/addToCart", { productId }, { withCredentials: true })
-      if (response.status === 200) {
-        dispatch(addToCart({productId}))
-        console.log("Product added to cart suceesully:", response.data)
-      }
-    } catch (error) {
-      console.log("Unable to add product to cart: ", error)
-    }
-  }
 
-  const handleUpdateQuantity = async (event, productId) => {
+  console.log("Products Received")
+  console.log(products)
+
+  const handleAddToCartOperation = async (productId) => {
     try {
-    const operation = event.target.innerText
-    const response = await axios.post("http://localhost:8000/api/v1/cart/updateQuantity", {operation: operation, productId: productId}, { withCredentials: true })
-    if (response.status === 200)
-      (operation === "+") ? dispatch(increaseQuantity({productId})) : dispatch(decreaseQuantity({productId}))
+      console.log("Info received in handleAddToCartOperation")
+      console.log("ID: ", productId)
+      await handleAddToCart(productId);
+      dispatch(addToCart({ productId }));
     } catch (error) {
-      console.log("Unable to decrease quantity: ", error)    
+      console.log("Unable to add product to cart: ", error);
     }
-  }
+  };
+
+  const handleUpdateQuantityOperation = async (event, productId) => {
+    try {
+      console.log("Info received in handleUpdateQuantityOperation")
+      console.log("ID: ", productId)
+      const operation = event.target.innerText === "+" ? "increase" : "decrease"
+      const updatedCartItem = await handleUpdateQuantity(operation, productId)
+      if (updatedCartItem)
+        if (operation === "increase")
+          dispatch(increaseQuantity({ productId }))
+        else
+          dispatch(decreaseQuantity({ productId }))
+    } catch (error) {
+      console.log("Unable to update quantity: ", error);
+    }
+  };
 
   return (
     <div className="flex-grow-1 p-4">
       <div className="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-xl-4 g-4">
         {Array.isArray(products) && products.length > 0 ? (
           products.map((item, index) => {
-            const cartItem = cart.find((cartItem) => cartItem.productId === item._id);
+            const cartItem = cart.find((cartItem) => String(cartItem._id) === String(item._id));
+            // const cartItem = cart.find((cartItem) => cartItem.productId === item._id);
             return (
               <div key={index} className="col">
                 <div className="card h-100 shadow-sm" style={{ cursor: "pointer" }}>
@@ -61,12 +71,12 @@ const ProductPage = ({ products }) => {
                     </div>
                     {cartItem ? (
                       <div className="d-flex align-items-center">
-                        <button className="btn btn-secondary" onClick={(event) => handleUpdateQuantity(event, item._id)}>-</button>
+                        <button className="btn btn-secondary" onClick={(event) => handleUpdateQuantityOperation(event, item._id)}>-</button>
                         <span className="mx-2">{cartItem.quantity}</span>
-                        <button className="btn btn-secondary" onClick={(event) => handleUpdateQuantity(event, item._id)}>+</button>
+                        <button className="btn btn-secondary" onClick={(event) => handleUpdateQuantityOperation(event, item._id)}>+</button>
                       </div>
                     ) : (
-                      <button className="btn btn-warning mt-auto w-100" onClick={() => handleAddToCart(item._id)}>
+                      <button className="btn btn-warning mt-auto w-100" onClick={() => handleAddToCartOperation(item._id)}> 
                         Add to cart
                       </button>
                     )}

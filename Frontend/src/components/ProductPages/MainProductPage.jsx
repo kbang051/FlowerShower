@@ -99,6 +99,8 @@ const MainProductPage = () => {
       setCurrentPage(event)
     }
 
+    
+
     return (
       <div className="page-container">
         {/* <HeaderBar /> */}

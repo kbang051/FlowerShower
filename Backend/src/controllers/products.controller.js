@@ -1,31 +1,8 @@
 import ApiError from "../utils/ApiError.js";
 import asyncHandler from "../utils/asyncHandler.js";
-import AWS from "aws-sdk";
 import { Product } from "../models/Products.model.js";
-
-AWS.config.update({
-  accessKeyId: process.env.ACCESS_KEY_AWS,
-  secretAccessKey: process.env.SECRET_KEY_AWS,
-  region: process.env.AWS_BUCKET_REGION,
-});
-
-const s3 = new AWS.S3();
-
-const generateSignedUrl = async (parentCategory, gender, image) => {
-  const bucketName = process.env.AWS_BUCKET_NAME;
-  const objectKey = `data/${parentCategory}/${gender}/${image}`;
-  const params = {
-    Bucket: bucketName,
-    Key: objectKey,
-    Expires: 300,
-  };
-  try {
-    const signedUrl = s3.getSignedUrl("getObject", params);
-    return signedUrl;
-  } catch (error) {
-    throw new ApiError(500, "Error while generating signed url ", error);
-  }
-};
+import { s3 } from "../aws.config.js";
+import { generateSignedUrl } from "../aws.config.js";
 
 const fetchProducts = asyncHandler(async (req, res) => {
   console.log("Fetch product request received")
@@ -46,24 +23,18 @@ const fetchProducts = asyncHandler(async (req, res) => {
   const skip = (Number(page) - 1) * Number(limit);
 
   try {
-    if (parentCategory) {
+    if (parentCategory)
       filter.parentCategory = Array.isArray(parentCategory) ? { $in: parentCategory } : parentCategory
-    }
-    if(subCategory) {
+    if (subCategory) 
       filter.subCategory = Array.isArray(subCategory) ? { $in: subCategory } : subCategory 
-    }
-    if (color) {
+    if (color) 
       filter.color = Array.isArray(color) ? { $in: color } : color
-    }
-    if (productType) {
+    if (productType) 
       filter.productType = Array.isArray(productType) ? { $in: productType } : productType
-    }
-    if (gender) {
+    if (gender) 
       filter.gender = Array.isArray(gender) ? { $in: gender } : gender
-    }
-    if (brand) {
+    if (brand) 
       filter.brand = Array.isArray(brand) ? { $in: brand } : brand
-    }
     if (minPrice || maxPrice) {
       filter.price = {};
       if (minPrice) filter.price.$gte = Number(minPrice)
@@ -139,21 +110,6 @@ const fetchFilters = asyncHandler(async (req, res) => {
       if (maxPrice) filter.price.$lte = Number(maxPrice)
     }
 
-    // if (parentCategory) filter.parentCategory = parentCategory
-    // if (subCategory) filter.subCategory = subCategory
-    // if (color) filter.color = color 
-    // if (productType) filter.productType = productType
-    // if (gender) filter.gender = gender 
-    // if (brand) filter.brand = brand 
-    // if (minPrice || maxPrice) {
-    //   filter.price = {};
-    //   if (minPrice) filter.price.$gte = Number(minPrice);
-    //   if (maxPrice) filter.price.$lte = Number(maxPrice);
-    // }
-    // if (keyword) {
-    //   filter.$text = { $search: keyword }
-    // }
-
     const products = await Product.find(filter)
     // const products = await Product.find(filter).sort({ score: { $meta: "textScore" } })
 
@@ -190,11 +146,6 @@ const fetchFilters = asyncHandler(async (req, res) => {
       MinPrice: Array.from(filtered_minPrice)
     }
 
-    // console.log()
-    // console.log()
-    // console.log("Backend response:")
-    // console.log(fetchedFilterResponse)
-
     return res.status(200).json(fetchedFilterResponse);
 
   } catch (error) {
@@ -202,7 +153,7 @@ const fetchFilters = asyncHandler(async (req, res) => {
   }
 });
 
-export { generateSignedUrl, fetchProducts, fetchFilters };
+export { fetchProducts, fetchFilters };
 
 
 

@@ -1,17 +1,8 @@
 import { User } from "../models/User.model.js";
 import { Product } from "../models/Products.model.js";
 import { Cart } from "../models/Cart.model.js";
-import { generateSignedUrl } from "./products.controller.js";
-import AWS from "aws-sdk";
+import { s3, generateSignedUrl } from "../aws.config.js";
 import ApiError from "../utils/ApiError.js";
-
-AWS.config.update({
-  accessKeyId: process.env.ACCESS_KEY_AWS,
-  secretAccessKey: process.env.SECRET_KEY_AWS,
-  region: process.env.AWS_BUCKET_REGION,
-});
-
-const s3 = new AWS.S3();
 
 const addToCart = async (req, res) => {
     try {
@@ -56,9 +47,14 @@ const viewCart = async (req, res) => {
         const cart = await Cart.findOne({userId: userId}).populate('items.productId')
         if (!cart)
             return res.status(200).json([])
-        const items = cart.items
+        const cartItems = cart.items
+        const items = await Promise.all(cartItems.map(async (item) => ({
+            ...item.productId.toObject(), 
+            quantity: item.quantity,
+            imageURL: await generateSignedUrl(item.productId.parentCategory, item.productId.gender, item.productId.image)
+        })))
         
-        return res.status(200).json(items)
+        return res.status(200).json(Array.from(items))
     } catch (error) {
         throw new ApiError(500, `Unable to view cart: ${error}`)
     }
@@ -74,9 +70,9 @@ const updateQuantity = async (req, res) => {
         const itemIndex = cart.items.findIndex((item) => item.productId.toString() === productId)
         
         if (itemIndex !== -1) {
-            if (operation === "+")
+            if (operation === "increase")
                 cart.items[itemIndex].quantity += 1
-            if (operation === "-")
+            if (operation === "decrease")
                 cart.items[itemIndex].quantity -= 1 
         }
 

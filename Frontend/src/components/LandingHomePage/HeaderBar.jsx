@@ -1,12 +1,13 @@
 import React from "react";
-import { useDispatch } from "react-redux";
-import "../LandingHomePage CSS/HeaderBar.css";
-import Cart from "../Cart/Cart.jsx";
 import axios from "axios";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import { initializeCart } from "../../cartSlice.js";
+import "../LandingHomePage CSS/HeaderBar.css";
 
-const HeaderBar = ({showCart, setShowCart, ViewCart}) => {
+const HeaderBar = () => {
   const dispatch = useDispatch()
+  const navigate = useNavigate()
   
   const fetchCartData = async() => {
     try {
@@ -22,10 +23,8 @@ const HeaderBar = ({showCart, setShowCart, ViewCart}) => {
   
   const handleCartDisplay = async () => {
     try {
-      if (!showCart) {
-        await fetchCartData()
-      }
-      setShowCart(!showCart)
+      await fetchCartData()
+      navigate("/cart")
     } catch (error) {
       console.log("Error in handleCartDisplay function: ", error)
     }
@@ -104,14 +103,7 @@ const HeaderBar = ({showCart, setShowCart, ViewCart}) => {
 
   return (
     <>
-      {showCart ? (
-        <>
-          {headerBarDesign()}
-          <Cart/>
-        </>
-      ) : (
-        headerBarDesign()
-      )}
+      {headerBarDesign()}
     </>
   );
 };
