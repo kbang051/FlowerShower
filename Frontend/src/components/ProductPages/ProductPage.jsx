@@ -1,4 +1,3 @@
-import axios from "axios";
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { handleAddToCart, handleUpdateQuantity } from "../Cart/cartOperations.js";
@@ -7,16 +6,9 @@ import { addToCart, decreaseQuantity, increaseQuantity, removeFromCart } from ".
 const ProductPage = ({ products }) => {
   const dispatch = useDispatch()
   const cart = useSelector((state) => state.cart)
-  console.log("Initialized Items")
-  console.log(cart)
-
-  console.log("Products Received")
-  console.log(products)
 
   const handleAddToCartOperation = async (productId) => {
     try {
-      console.log("Info received in handleAddToCartOperation")
-      console.log("ID: ", productId)
       await handleAddToCart(productId);
       dispatch(addToCart({ productId }));
     } catch (error) {
@@ -26,8 +18,6 @@ const ProductPage = ({ products }) => {
 
   const handleUpdateQuantityOperation = async (event, productId) => {
     try {
-      console.log("Info received in handleUpdateQuantityOperation")
-      console.log("ID: ", productId)
       const operation = event.target.innerText === "+" ? "increase" : "decrease"
       const updatedCartItem = await handleUpdateQuantity(operation, productId)
       if (updatedCartItem)

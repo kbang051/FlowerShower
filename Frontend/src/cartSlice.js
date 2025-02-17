@@ -36,12 +36,8 @@ const cartSlice = createSlice({
         // },
 
         increaseQuantity: (state, action) => {
-            console.log("State of redux:")
-            console.log(JSON.stringify(state))
             const {productId, quantity = 1} = action.payload 
-            console.log("Product ID Received in Redux upon click: ", productId)
             const existingProduct = state.find((item) => String(item._id) === String(productId)) 
-            console.log("Existing Product: ", existingProduct)
             if (existingProduct) 
                 existingProduct.quantity += quantity 
             else 
@@ -52,10 +48,11 @@ const cartSlice = createSlice({
         decreaseQuantity: (state, action) => {
             const {productId} = action.payload 
             const existingProduct = state.find((item) => String(item._id) === String(productId))
-            if (existingProduct)
-                existingProduct.quantity -= 1 
-            if (existingProduct.quantity === 0)
-                return state.filter((item) => item._id !== productId) 
+            if (!existingProduct) 
+                return state 
+            if (existingProduct.quantity > 1)
+                return state.map((item) => ( String(item._id) === String(productId) ) ? {...item, quantity: item.quantity - 1} : item)
+            return state.filter((item) => String(item._id) !== String(productId))
         },
 
         // decreaseQuantity: (state, action) => {

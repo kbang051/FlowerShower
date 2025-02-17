@@ -32,7 +32,13 @@ app.use("/api/v1/getProducts", productRouter) // http://localhost:8000/api/v1/ge
 
 import cartRouter from "./routes/cart.routes.js"
 
-app.use("/api/v1/cart", cartRouter) // http://localhost:8000/api/v1/cart/addToCart
-                                    // http://localhost:8000/api/v1/cart/viewCart
+app.use("/api/v1/cart", cartRouter) // http://localhost:8000/api/v1/cart/addToCart            --POST
+                                    // http://localhost:8000/api/v1/cart/viewCart             --GET
+                                    // http://localhost:8000/api/v1/cart/updateQuantity       --POST
+                                    // http://localhost:8000/api/v1/cart/removeFromCart       --POST
                                               
+import paymentRouter from "./routes/payment.routes.js"
+
+app.use("/api/v1/payment", paymentRouter) // http://localhost:8000/api/v1/payment/stripePaymentGateway       --POST
+
 export { app };

@@ -60,6 +60,25 @@ const viewCart = async (req, res) => {
     }
 }
 
+const removeFromCart = async (req, res) => {
+    try {
+        console.log("Request received to remove an item from cart")
+        const userId = req.user?._id
+        if (!userId)
+            throw new ApiError(500, "User not found")
+        const {productId} = req.body 
+        console.log("Item to be removed from cart: ", productId)
+        const cart = await Cart.findOne({userId: userId})
+        if (!cart)
+            throw new ApiError(400, "Cart not found")
+        cart.items = cart.items.filter((item) => item.productId.toString() !== productId)
+        await cart.save()
+        return res.status(200).json({message: "Item has been successfully removed from cart"})
+    } catch (error) {
+        throw new ApiError(400, `Error while trying to delete an item from cart :  ${error}`)
+    }
+}
+
 const updateQuantity = async (req, res) => {
     try {
         const userId = req.user?._id
@@ -86,4 +105,4 @@ const updateQuantity = async (req, res) => {
     }
 }
 
-export { addToCart, viewCart, updateQuantity }
+export { addToCart, viewCart, removeFromCart, updateQuantity }

@@ -26,12 +26,8 @@ const registerUser = asyncHandler(async (req, res) => {
   const { firstname, lastname, username, email, password, role, address } = req.body
   const required_elements = [firstname, lastname, username, email, password]
   for (let i = 0; i < required_elements.length; i++) {
-    if (!required_elements[i]?.trim()) {
-      throw new ApiError(
-        400,
-        `${required_elements[i]} is required to register the user`
-      );
-    }
+    if (!required_elements[i]?.trim()) 
+      throw new ApiError(400, `${required_elements[i]} is required to register the user`);
   }
 
   const existingUser = await User.findOne({
@@ -39,8 +35,9 @@ const registerUser = asyncHandler(async (req, res) => {
   });
   console.log("Bypassed existingUser")
 
-
-  if (existingUser) throw new ApiError(400, "An account with this email already exists. Please login or use a different email.");
+  if (existingUser) 
+      throw new ApiError(400, "An account with this email already exists. Please login or use a different email.");
+  
   console.log("Left from register")
   return res.status(200).json(new ApiResponse(200, {}, "Proceed to OTP verification"));
 });
@@ -76,74 +73,53 @@ const registerAfterVerification = asyncHandler(async (req, res) => {
 const loginUser = asyncHandler(async (req, res) => {
   const { username, password } = req.body;
   if (!username) 
-    throw new ApiError(400, "Please enter username or email to login");
+    throw new ApiError(400, "Please enter username or email to login")
   if (!password) 
-    throw new ApiError(400, "Please enter password");
+    throw new ApiError(400, "Please enter password")
   try {
-    const user = await User.findOne({ $or: [{ username: username }, { email: username }] });
+    const user = await User.findOne({ $or: [{ username: username }, { email: username }] })
     if (!user) 
-      throw new ApiError(400, "User hasn't been registered, please register and then login");
+      throw new ApiError(400, "User hasn't been registered, please register and then login")
     const isPasswordValid = await user.isPasswordCorrect(password);
     if (!isPasswordValid) 
-      throw new ApiError(400, "Incorrect password");
-    const { accessToken, refreshToken } = await generateAccessAndRefreshTokens(user._id);
-    const loggedInUser = await User.findById(user._id).select("-password -refreshToken");
+      throw new ApiError(400, "Incorrect password")
+    const { accessToken, refreshToken } = await generateAccessAndRefreshTokens(user._id)
+    const loggedInUser = await User.findById(user._id).select("-password -refreshToken")
     const cookieOptions = {
       httpOnly: true,
       secure: true,
       sameSite: "Strict",
     };
-    res.cookie("accessToken", accessToken, cookieOptions);
-    return res
-      .status(200)
-      .json(
-        new ApiResponse(
-          200,
-          { user: loggedInUser, accessToken, refreshToken },
-          "User logged in successfully"
-        )
-      );
+    res.cookie("accessToken", accessToken, cookieOptions)
+    return res.status(200).json(new ApiResponse(200, { user: loggedInUser, accessToken, refreshToken },"User logged in successfully"))
   } catch (error) {
-    console.error("An error occurred during login:", error);
-    throw new ApiError(500, "Unable to login. Please try again.");
+    console.error("An error occurred during login:", error)
+    throw new ApiError(500, "Unable to login. Please try again.")
   }
 });
 
-
 //verifyJWT
 const logoutUser = asyncHandler(async (req, res) => {
-  await User.findByIdAndUpdate(
-    req.user._id,
-    { $set: { refreshToken: undefined } },
-    { new: true }
-  );
+  await User.findByIdAndUpdate(req.user._id, { $set: { refreshToken: undefined } }, { new: true })
 
   const options = {
     httpOnly: true,
     secure: true,
-  };
+  }
 
-  return res
-    .status(200)
-    .clearCookie("accessToken", options)
-    .json(new ApiResponse(200, {}, "User Logged Out Successfully"));
+  return res.status(200).clearCookie("accessToken", options).json(new ApiResponse(200, {}, "User Logged Out Successfully"));
 });
 
 const refreshAccessToken = asyncHandler(async (req, res) => {
   try {
     const incomingToken = req.cookies?.accessToken || req.body.accessToken;
-    if (!incomingToken) {
-      throw new ApiError(400, "Unauthorized request");
-    }
-
-    const decodedToken = jwt.verify(
-      incomingToken,
-      process.env.ACCESS_TOKEN_SECRET
-    );
+    if (!incomingToken) 
+      throw new ApiError(400, "Unauthorized request")
+    
+    const decodedToken = jwt.verify(incomingToken, process.env.ACCESS_TOKEN_SECRET)
     const user = await User.findById(decodedToken?._id);
-    if (!user) {
+    if (!user) 
       throw new ApiError(400, "Invalid access token");
-    }
 
     const newAccessToken = await user.generateAccessToken();
 
@@ -152,10 +128,7 @@ const refreshAccessToken = asyncHandler(async (req, res) => {
       secure: true,
     };
 
-    return res
-      .status(200)
-      .cookie("accessToken", newAccessToken, options)
-      .json(new ApiResponse(200, {}, "Access token refreshed successfully"));
+    return res.status(200).cookie("accessToken", newAccessToken, options).json(new ApiResponse(200, {}, "Access token refreshed successfully"));
   } catch (error) {
     throw new ApiError(400, error?.message || "Unable to refresh access token");
   }

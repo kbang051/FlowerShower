@@ -4,6 +4,9 @@ import FilterSideBar from "./components/ProductPages/FilterSideBar.jsx"
 import MainProductPage from "./components/ProductPages/MainProductPage.jsx"
 import HeaderBar from "./components/LandingHomePage/HeaderBar.jsx"
 import Cart from "./components/Cart/Cart.jsx"
+import MakePayment from "./components/Cart/StripeInterface.jsx"
+import SuccessPage from "./components/Cart/PaymentSuccess.jsx"
+import FailurePage from "./components/Cart/PaymentFailed.jsx"
 import { register } from "swiper/element/bundle"; // import function to register Swiper custom elements
 import { Outlet, useLocation } from 'react-router-dom'
 
@@ -33,6 +36,9 @@ function App() {
           <Route path="/filterSideBar" element={<FilterSideBar/>} />
           <Route path="/mainProductPage" element={<MainProductPage/>} />
           <Route path="/cart" element={<Cart/>} />
+          <Route path="/paymentPage" element={<MakePayment/>} />
+          <Route path="/success" element={<SuccessPage/>} />
+          <Route path="/paymentFailed" element={<FailurePage/>} />
         </Route>
       </Routes>
     </BrowserRouter>
