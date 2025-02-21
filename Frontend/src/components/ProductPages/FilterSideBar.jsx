@@ -1,8 +1,11 @@
 import React from "react";
-import HeaderBar from "../LandingHomePage/HeaderBar.jsx";
+import { useSelector } from "react-redux";
 import '../ProductPages CSS/FilterSideBar.css' 
 
 const FilterSideBar = ({ fetchFilterResponse, expandedSections, setExpandedSections, toggleSection, filtersSelected, setFiltersSelected, filterSelectionMethod }) => {
+  const initialFilter = useSelector((state) => state.filterSlicer.filter)
+  // Brand: ['Gini']
+  // gender: ['Men','Boys'] 
   return (
     <>
         <aside className="filter-sidebar">
@@ -37,45 +40,6 @@ const FilterSideBar = ({ fetchFilterResponse, expandedSections, setExpandedSecti
   );
 };
 
-
-// const FilterSideBar = ({ fetchFilterResponse, expandedSections, setExpandedSections, toggleSection, filtersSelected, setFiltersSelected, filterSelectionMethod }) => {
-//   return (
-//     <>
-//       <div className="page-container">
-//         <HeaderBar />
-//         {/* Left sidebar */}
-//         <aside className="filter-sidebar">
-//           <div className="filter-container">
-//             <div className="filter-header">
-//               <h2 className="filter-title">Filters</h2>
-//             </div>
-//             <div className="filter-sections">
-//               {Object.entries(fetchFilterResponse).map(([key, values]) => (
-//                 <div key={key} className="filter-section">
-//                   <button className="filter-section-header" onClick={() => toggleSection(key)}>
-//                     <span>{key}</span>
-//                     <i className={`bi bi-chevron-down ${ expandedSections[key] ? "rotated" : ""}`}></i>
-//                   </button>
-
-//                   <div className={`filter-options ${expandedSections[key] ? "show" : ""}`}>
-//                     <div className="filter-options-grid">
-//                       {values.map((value, index) => (
-//                         <div key={index} className="form-check filter-option">
-//                           <input type="checkbox" className="form-check-input" id={`${key}-${index}`} onChange={(event) => filterSelectionMethod(event, key, value)}/>
-//                           <label className="form-check-label" htmlFor={`${key}-${index}`}> {value} </label>
-//                         </div>
-//                       ))}
-//                     </div>
-//                   </div>
-//                 </div>
-//               ))}
-//             </div>
-//           </div>
-//         </aside>
-//       </div>
-//     </>
-//   );
-// };
 
 export default FilterSideBar
 

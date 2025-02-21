@@ -14,7 +14,7 @@ const FailurePage = () => {
           title="Payment Failed"
           subTitle="Unfortunately, your payment could not be processed. Please try again."
         />
-        <Button type="primary" danger className="w-100 mb-2" size="large" onClick={() => navigate("/cart")}>
+        <Button type="primary" danger className="w-100 mb-2" size="large" onClick={() => navigate("/mainLandingPage/cart")}>
           Retry Payment
         </Button>
         <Button type="default" className="w-100" size="large" onClick={() => navigate("/mainLandingPage")}>

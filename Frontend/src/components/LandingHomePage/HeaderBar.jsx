@@ -24,7 +24,7 @@ const HeaderBar = () => {
   const handleCartDisplay = async () => {
     try {
       await fetchCartData()
-      navigate("/cart")
+      navigate("/mainLandingPage/cart")
     } catch (error) {
       console.log("Error in handleCartDisplay function: ", error)
     }
@@ -54,7 +54,7 @@ const HeaderBar = () => {
                 data-bs-toggle="dropdown"
                 aria-expanded="false"
               >
-                {`${ localStorage.getItem('UserName') ? localStorage.getItem('UserName') : 'Login'}`}
+                {`${ localStorage.getItem('Email') ? localStorage.getItem('Email') : 'Login'}`}
               </button>
               <ul className="dropdown-menu">
                 <li className="d-flex justify-content-between">

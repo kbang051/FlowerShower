@@ -23,6 +23,7 @@ const generateAccessAndRefreshTokens = async (userID) => {
 
 const registerUser = asyncHandler(async (req, res) => {
   console.log("Request received at register")
+  console.log(req)
   const { firstname, lastname, username, email, password, role, address } = req.body
   const required_elements = [firstname, lastname, username, email, password]
   for (let i = 0; i < required_elements.length; i++) {
@@ -71,13 +72,13 @@ const registerAfterVerification = asyncHandler(async (req, res) => {
 });
 
 const loginUser = asyncHandler(async (req, res) => {
-  const { username, password } = req.body;
-  if (!username) 
-    throw new ApiError(400, "Please enter username or email to login")
+  const { email, password } = req.body;
+  if (!email) 
+    throw new ApiError(400, "Please enter email to login")
   if (!password) 
     throw new ApiError(400, "Please enter password")
   try {
-    const user = await User.findOne({ $or: [{ username: username }, { email: username }] })
+    const user = await User.findOne({ email: email })
     if (!user) 
       throw new ApiError(400, "User hasn't been registered, please register and then login")
     const isPasswordValid = await user.isPasswordCorrect(password);

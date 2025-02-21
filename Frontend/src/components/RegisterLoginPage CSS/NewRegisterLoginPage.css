@@ -1,0 +1,38 @@
+.dark-gradient-background {
+    background: linear-gradient(to bottom right, #1e1e2f, #3a3a4b, #4b4b5b);
+    color: #e0e0e0; /* Light text color */
+  }
+  
+  /* Dark buttons */
+  .btn-dark-theme {
+    background-color: #333333;
+    color: white;
+    border: none;
+  }
+  
+  .btn-dark-theme:hover {
+    background-color: #444444;
+  }
+  
+  /* Input fields for dark theme */
+  .form-control-dark {
+    background-color: #2c2c3c;
+    color: white;
+    border: 1px solid #555555;
+  }
+  
+  .form-control-dark::placeholder {
+    color: #aaa;
+  }
+  
+  /* Card for the auth form */
+  .card-dark {
+    background-color: #2c2c3c;
+    color: #e0e0e0;
+    border-radius: 15px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+  }
+  
+  .card-dark .card-body {
+    padding: 2rem;
+  }

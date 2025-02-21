@@ -43,10 +43,11 @@ const sendOTP = asyncHandler(async (req, res, next) => {
 })
 
 const verifyOTP = asyncHandler(async (req, res, next) => {            
-    const { email, otp } = req.body
+    console.log(req)
     console.log("Data received at verifyOTP:")
-    const otpRecord = await OTP.findOne({ email })
-    if (!otpRecord || otpRecord.otp != otp) {
+    const { email, otp } = req.body
+    const otpRecord = await OTP.findOne({ email: email.trim() })
+    if (!otpRecord || otpRecord.otp.trim() != otp) {
         return next(new ApiError(400, "Invalid or expired OTP"))
     }
     await OTP.deleteOne({email})

@@ -21,7 +21,7 @@ const CategoriesHeader = () => {
     else 
       dispatch(clearFilters())
 
-    setTimeout(()=> { navigate(`/mainProductPage`) }, 0)
+    setTimeout(()=> { navigate(`/mainLandingPage/mainProductPage`) }, 0)
   };
   
   const reduxFilter = useSelector((state) => state.filterSlicer.filter) 

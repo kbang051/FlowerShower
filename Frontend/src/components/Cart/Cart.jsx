@@ -7,6 +7,7 @@ import { handleUpdateQuantity } from './cartOperations.js'
 import { decreaseQuantity, increaseQuantity, removeFromCart } from "../../cartSlice.js"
 import { Spin } from 'antd'
 
+
 const Cart = () => {
   const cart = useSelector((state) => state.cart)
   const dispatch = useDispatch()

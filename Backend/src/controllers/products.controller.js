@@ -41,7 +41,11 @@ const fetchProducts = asyncHandler(async (req, res) => {
       if (maxPrice) filter.price.$lte = Number(maxPrice)
     }
 
+    console.log("Filter section of fetch products")
+    console.log(filter)
+
     const totalProducts = await Product.countDocuments(filter)
+    console.log("Total Products Found: ", totalProducts)
     const products = await Product.find(filter).skip(skip).limit(Number(limit))
     const totalPages = Math.ceil(totalProducts/limit)
 
@@ -80,9 +84,6 @@ const fetchFilters = asyncHandler(async (req, res) => {
     maxPrice,
     // keyword,
   } = req.query;
-
-  // console.log("Filters sent by frontend:")
-  // console.log(req.query)
   
   const filter = {}
   try {
@@ -110,25 +111,26 @@ const fetchFilters = asyncHandler(async (req, res) => {
       if (maxPrice) filter.price.$lte = Number(maxPrice)
     }
 
+    console.log("Filter section of fetch filters")
+    console.log(filter)
+
     const products = await Product.find(filter)
-    // const products = await Product.find(filter).sort({ score: { $meta: "textScore" } })
+
+    console.log("Number of products found meeting the filter criteria")
+    console.log(products.length)
 
     const filtered_parentCategory = new Set()
-    products.forEach((item) => filtered_parentCategory.add(item.parentCategory))
-
     const filtered_subCategory = new Set()
-    products.forEach((item) => filtered_subCategory.add(item.subCategory))
-
     const filtered_brand = new Set()
-    products.forEach((item) => filtered_brand.add(item.brand))
-
     const filtered_color = new Set()
-    products.forEach((item) => filtered_color.add(item.color))
-
     const filtered_productType = new Set()
-    products.forEach((item) => filtered_productType.add(item.productType))
-
     const filtered_gender = new Set()
+    
+    products.forEach((item) => filtered_parentCategory.add(item.parentCategory))
+    products.forEach((item) => filtered_subCategory.add(item.subCategory))
+    products.forEach((item) => filtered_brand.add(item.brand))
+    products.forEach((item) => filtered_color.add(item.color))
+    products.forEach((item) => filtered_productType.add(item.productType))
     products.forEach((item) => filtered_gender.add(item.gender))
 
     const prices = products.map((p) => p.price)

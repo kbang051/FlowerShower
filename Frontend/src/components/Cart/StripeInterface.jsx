@@ -3,8 +3,6 @@ import { loadStripe } from "@stripe/stripe-js"
 import axios from 'axios'
 
 const MakePayment = async () => {
-  console.log("Make payment called")
-  console.log("All env variables:", import.meta.env)
   const STRIPE_KEY = import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY
   if (!STRIPE_KEY)
     console.error("Stripe failed to initialize")

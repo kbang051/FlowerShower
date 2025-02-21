@@ -1,6 +1,7 @@
 import React from "react";
 import ContentArea from "./ContentArea.jsx";
 import axios from "axios";
+import { Outlet } from "react-router-dom";
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { initializeCart } from "../../cartSlice.js";
@@ -29,6 +30,7 @@ const MainLandingPage = () => {
   return (
     <>
       <ContentArea/>
+      <Outlet />
     </>
   );
 };

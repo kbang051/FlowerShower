@@ -7,16 +7,21 @@ import FilterSideBar from "./FilterSideBar.jsx";
 import ProductPage from "./ProductPage.jsx";
 
 const MainProductPage = () => {
+
     const initialFilter = useSelector((state) => state.filterSlicer.filter)
+
     const [fetchFilterResponse, setFetchFilterResponse] = useState({})
     const [expandedSections, setExpandedSections] = useState({})
-    const [filtersSelected, setFiltersSelected] = useState({})
+    const [filtersSelected, setFiltersSelected] = useState({ ...initialFilter })
+    console.log("Data stored in filtersSelected")
+    console.log(filtersSelected)
     const [products, setProducts] = useState({})
     const [totalProducts, setTotalProducts] = useState(null)
     const [totalPages, setTotalPages] = useState(null)
     const [currentPage, setCurrentPage] = useState(1)
     
-    useEffect(() => {
+    // Filters are fetched as soon as we visit the productPage
+    useEffect(() => {   
         const fetchFilters = async () => {
         try {
             const response = await axios.get("http://localhost:8000/api/v1/getProducts/getFilters", { params: initialFilter })
@@ -38,6 +43,8 @@ const MainProductPage = () => {
     const filterSelectionMethod = (event, key, value) => {
       setFiltersSelected((prevFilters) => {
         const newFilters = { ...prevFilters }
+        console.log("New Filters")
+        console.log(newFilters)
         if (event.target.checked) {
           if (!Array.isArray(newFilters[key])) {
             newFilters[key] = []; 
@@ -79,6 +86,8 @@ const MainProductPage = () => {
   
       const fetchProducts = async () => {
         try {
+          console.log("Filters in desired format")
+          console.log(filtersInDesiredFormat)
           const response = await axios.get("http://localhost:8000/api/v1/getProducts/getProducts", { params: filtersInDesiredFormat })
           if (response.status === 200) 
             console.log("Successfully fetched these products from backend")
