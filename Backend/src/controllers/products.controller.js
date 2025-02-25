@@ -5,7 +5,7 @@ import { s3 } from "../aws.config.js";
 import { generateSignedUrl } from "../aws.config.js";
 
 const fetchProducts = asyncHandler(async (req, res) => {
-  console.log("Fetch product request received")
+  // console.log("Fetch product request received")
   const {
     page = 1,
     limit = 30,
@@ -41,11 +41,11 @@ const fetchProducts = asyncHandler(async (req, res) => {
       if (maxPrice) filter.price.$lte = Number(maxPrice)
     }
 
-    console.log("Filter section of fetch products")
-    console.log(filter)
+    // console.log("Filter section of fetch products")
+    // console.log(filter)
 
     const totalProducts = await Product.countDocuments(filter)
-    console.log("Total Products Found: ", totalProducts)
+    // console.log("Total Products Found: ", totalProducts)
     const products = await Product.find(filter).skip(skip).limit(Number(limit))
     const totalPages = Math.ceil(totalProducts/limit)
 
@@ -72,7 +72,8 @@ const fetchProducts = asyncHandler(async (req, res) => {
 });
 
 const fetchFilters = asyncHandler(async (req, res) => {
-  console.log("Fetch filters request received")
+  console.log("Request")
+  console.log(req.query)
   const {
     parentCategory,
     subCategory,
@@ -116,8 +117,8 @@ const fetchFilters = asyncHandler(async (req, res) => {
 
     const products = await Product.find(filter)
 
-    console.log("Number of products found meeting the filter criteria")
-    console.log(products.length)
+    // console.log("Number of products found meeting the filter criteria")
+    // console.log(products.length)
 
     const filtered_parentCategory = new Set()
     const filtered_subCategory = new Set()
@@ -147,6 +148,9 @@ const fetchFilters = asyncHandler(async (req, res) => {
       MaxPrice: Array.from(filtered_maxPrice),
       MinPrice: Array.from(filtered_minPrice)
     }
+
+    // console.log("Response sent for filters")
+    // console.log(fetchedFilterResponse)
 
     return res.status(200).json(fetchedFilterResponse);
 

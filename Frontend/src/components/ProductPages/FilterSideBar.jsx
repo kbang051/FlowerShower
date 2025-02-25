@@ -1,11 +1,16 @@
-import React from "react";
-import { useSelector } from "react-redux";
+import React from "react"
+import { useSearchParams } from "react-router-dom"
 import '../ProductPages CSS/FilterSideBar.css' 
 
 const FilterSideBar = ({ fetchFilterResponse, expandedSections, setExpandedSections, toggleSection, filtersSelected, setFiltersSelected, filterSelectionMethod }) => {
-  const initialFilter = useSelector((state) => state.filterSlicer.filter)
-  // Brand: ['Gini']
-  // gender: ['Men','Boys'] 
+  
+  const [searchParams] = useSearchParams()
+  
+  const isFilterSelected = (key, value) => {
+    let newKey = String(key).toLowerCase()
+    return searchParams.getAll(newKey).includes(value)
+  }
+  
   return (
     <>
         <aside className="filter-sidebar">
@@ -20,12 +25,16 @@ const FilterSideBar = ({ fetchFilterResponse, expandedSections, setExpandedSecti
                     <span>{key}</span>
                     <i className={`bi bi-chevron-down ${ expandedSections[key] ? "rotated" : ""}`}></i>
                   </button>
-
                   <div className={`filter-options ${expandedSections[key] ? "show" : ""}`}>
                     <div className="filter-options-grid">
                       {values.map((value, index) => (
                         <div key={index} className="form-check filter-option">
-                          <input type="checkbox" className="form-check-input" id={`${key}-${index}`} onChange={(event) => filterSelectionMethod(event, key, value)}/>
+                          <input type="checkbox" 
+                            className="form-check-input" 
+                            id={`${key}-${index}`} 
+                            onChange={(event) => filterSelectionMethod(event, key, value)}
+                            checked={isFilterSelected(key, value)}
+                          />
                           <label className="form-check-label" htmlFor={`${key}-${index}`}> {value} </label>
                         </div>
                       ))}
@@ -37,8 +46,8 @@ const FilterSideBar = ({ fetchFilterResponse, expandedSections, setExpandedSecti
           </div>
         </aside>
     </>
-  );
-};
+  )
+}
 
 
 export default FilterSideBar

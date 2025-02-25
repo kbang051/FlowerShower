@@ -16,12 +16,4 @@ const ContentArea = () => {
 
 export default ContentArea;
 
-// const ContentArea = () => {                                                                     for landing page (home page)
-//   return (
-//     <div className="d-flex flex-column h-screen w-100 bg-light">
-//       <CategoriesHeader/>
-//       <ProductCards/>
-//       <CategoriesCarousels/>
-//     </div>
-//   );
-// };
+

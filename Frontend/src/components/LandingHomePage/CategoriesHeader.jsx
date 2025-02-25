@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { addFilter, clearFilters } from "../../filterSlice.js";
 import { useNavigate } from "react-router-dom";
@@ -14,14 +14,25 @@ const CategoriesHeader = () => {
   const navigate = useNavigate()
 
   const selectionCategory = (label) => {
-    if (label === "Men" || label === "Boys") 
+    let newParams = new URLSearchParams()
+    newParams.set("parentCategory", "Apparel")
+    if (label === "Men" || label === "Boys") {
+      newParams.append("gender", "Men")
+      newParams.append("gender", "Boys")
       dispatch(addFilter({ key: "gender", value: ["Men","Boys"] }));
-    else if (label === "Women" || label === "Girls")
+    } 
+    else if (label === "Women" || label === "Girls") {
+      newParams.append("gender", "Women")
+      newParams.append("gender", "Girls")
       dispatch(addFilter({ key: "gender", value: ["Women","Girls"] }));
+    }
     else 
       dispatch(clearFilters())
 
-    setTimeout(()=> { navigate(`/mainLandingPage/mainProductPage`) }, 0)
+    setTimeout(()=> { navigate({
+      pathname: '/mainLandingPage/mainProductPage',
+      search: newParams.toString()
+    }) }, 0)
   };
   
   const reduxFilter = useSelector((state) => state.filterSlicer.filter) 

@@ -6,6 +6,12 @@ const filterSlice = createSlice({
         filter: { parentCategory: ["Apparel"] }
     },
     reducers: {
+        initializeFilters: (state, action) => {
+            state.filter = action.payload 
+        },
+        updateFilters: (state, action) => {
+            state.filter = action.payload
+        },
         addFilter: (state, action) => {
             const { key, value } = action.payload
             if (!state.filter[key]) {
@@ -22,6 +28,6 @@ const filterSlice = createSlice({
     }
 })
 
-export const { addFilter, clearFilters } = filterSlice.actions
+export const { addFilter, initializeFilters, updateFilters, clearFilters } = filterSlice.actions
 export default filterSlice.reducer
 
