@@ -2,7 +2,7 @@ import React from "react"
 import { useSearchParams } from "react-router-dom"
 import '../ProductPages CSS/FilterSideBar.css' 
 
-const FilterSideBar = ({ fetchFilterResponse, expandedSections, setExpandedSections, toggleSection, filtersSelected, setFiltersSelected, filterSelectionMethod }) => {
+const FilterSideBar = ({ fetchFilterResponse, expandedSections, toggleSection, filterSelectionMethod }) => {
   
   const [searchParams] = useSearchParams()
   

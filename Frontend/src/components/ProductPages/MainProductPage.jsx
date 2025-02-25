@@ -15,6 +15,9 @@ const MainProductPage = () => {
   const navigate = useNavigate()
   const [searchParams, setSearchParams] = useSearchParams()
 
+  const initialPage = searchParams.get("page") ? Number(searchParams.get("page")) : 1
+  const [currentPage, setCurrentPage] = useState(initialPage)
+
   // Read Filters from URL and store them in redux
   useEffect(() => {
     const allFilters = [
@@ -41,14 +44,11 @@ const MainProductPage = () => {
   const initialFilter = useSelector((state) => state.filterSlicer.filter)
   const [filtersSelected, setFiltersSelected] = useState(initialFilter)
 
-  console.log("filtersSelected sent to fetchFilters and fetchProducts as initial parameters")
-  console.log(filtersSelected)
-
   const [fetchFilterResponse, setFetchFilterResponse] = useState({})
   const [products, setProducts] = useState({})
   const [totalProducts, setTotalProducts] = useState(null)
   const [totalPages, setTotalPages] = useState(null)
-  const [currentPage, setCurrentPage] = useState(1)
+  // const [currentPage, setCurrentPage] = useState(1)
 
   const [expandedSections, setExpandedSections] = useState({})
 
@@ -58,8 +58,6 @@ const MainProductPage = () => {
       try {
         const response = await axios.get("http://localhost:8000/api/v1/getProducts/getFilters", { params: filtersSelected })
         if (response.status == 200) {
-          console.log("Response of fetchFilter sidebar")
-          console.log(response.data)
           setFetchFilterResponse(response.data)
         }
       } catch (error) {
@@ -73,7 +71,8 @@ const MainProductPage = () => {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await axios.get("http://localhost:8000/api/v1/getProducts/getProducts", { params: filtersSelected })
+        const params = { ...filtersSelected, page: currentPage }
+        const response = await axios.get("http://localhost:8000/api/v1/getProducts/getProducts", { params })
         if (response.status == 200) {
           setProducts(response.data.ProductDetails)          
           setCurrentPage(response.data.CurrentPage)
@@ -126,15 +125,18 @@ const MainProductPage = () => {
 
   useEffect(() => {
       dispatch(updateFilters(filtersSelected))
-      const newSearchParams = new URLSearchParams();
+      const newSearchParams = new URLSearchParams()
       Object.entries(filtersSelected).forEach(([filterKey, values]) => {
-        values.forEach((val) => newSearchParams.append(filterKey, val))
+        values.forEach((val) => newSearchParams.append(String(filterKey).toLowerCase(), val))
       })
+
+      newSearchParams.set("page", currentPage)
+
       navigate({
         pathname: "/mainLandingPage/mainProductPage",
         search: newSearchParams.toString(),
       })
-  }, [filtersSelected, dispatch, navigate])
+  }, [filtersSelected, currentPage, dispatch, navigate])
 
   const toggleSection = (key) => {
     setExpandedSections((prev) => ({
@@ -145,6 +147,9 @@ const MainProductPage = () => {
 
   const handlePageChange = (event) => {
     setCurrentPage(event)
+    const newSearchParams = new URLSearchParams(searchParams)
+    newSearchParams.set("page", event)
+    setSearchParams(newSearchParams)
   }
 
   return (
@@ -154,10 +159,7 @@ const MainProductPage = () => {
           fetchFilterResponse={fetchFilterResponse}
           setFetchFilterResponse={setFetchFilterResponse}
           expandedSections={expandedSections} //present
-          setExpandedSections={setExpandedSections} //present
           toggleSection={toggleSection}  //present
-          filtersSelected={filtersSelected}  //present but not used
-          setFiltersSelected={setFiltersSelected} //present but not used
           filterSelectionMethod={filterSelectionMethod}  //present
         />
         <div className="d-flex flex-column gap-3">
