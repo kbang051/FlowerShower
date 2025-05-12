@@ -11,7 +11,7 @@ This is a FullStack E-commerce application built using **React**, **Redux**, **N
 ### Folder Structure
 
 #### Backend
-```
+
 Backend/
 ├── .env                     # Environment variables
 ├── .gitignore               # Git ignore file
@@ -38,10 +38,10 @@ Backend/
 │   │   ├── Cart.model.js
 │   ├── routes/              # API routes
 │   ├── utils/               # Utility functions
-```
+
 
 #### Frontend
-```
+
 Frontend/
 ├── .env                     # Environment variables
 ├── .gitignore               # Git ignore file
@@ -75,7 +75,7 @@ Frontend/
 │   │   │   ├── RegisterLoginPage.jsx
 │   ├── assets/              # Static assets for frontend
 │   ├── demotext.txt         # Demo text for testing
-```
+
 
 ---
 
