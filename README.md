@@ -1,4 +1,4 @@
-# React + Vite
+# FlowerShower
 ```md
 # FullStack E-commerce Application
 
